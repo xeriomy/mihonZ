@@ -80,8 +80,9 @@ object DiscoverPresenter {
         sort: DiscoverUiState.SortMode,
     ): List<DirectoryRepo> {
         val comparator = when (sort) {
-            is DiscoverUiState.SortMode.NAME -> compareBy({ it.name })
-            is DiscoverUiState.SortMode.COUNT -> compareBy({ -(it.extensionCount ?: Int.MIN_VALUE) }, { it.name })
+            is DiscoverUiState.SortMode.NAME -> compareBy<DirectoryRepo> { it.name }
+            is DiscoverUiState.SortMode.COUNT -> compareBy<DirectoryRepo> { -(it.extensionCount ?: 0) }
+                .thenBy { it.name }
         }
         return repos.sortedWith(comparator)
     }

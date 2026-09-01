@@ -5,6 +5,7 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import eu.kanade.tachiyomi.ui.discover.domain.ContentType
 import eu.kanade.tachiyomi.ui.discover.domain.DirectoryRepo
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
