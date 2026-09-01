@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -54,12 +55,13 @@ import mihon.icons.materialsymbols.rounded.Download
 import mihon.icons.materialsymbols.rounded.Public
 import mihon.icons.materialsymbols.rounded.Refresh
 import mihon.icons.materialsymbols.rounded.Search
-import mihon.icons.materialsymbols.rounded.Sort
+import mihon.icons.materialsymbols.rounded.SortByAlpha
 import tachiyomi.i18n.MR
 import tachiyomi.presentation.core.components.material.padding
 import tachiyomi.presentation.core.components.material.topSmallPaddingValues
 import tachiyomi.presentation.core.i18n.stringResource
 import tachiyomi.presentation.core.util.plus
+import kotlin.math.absoluteValue
 
 /**
  * The Discover tab content.
@@ -511,7 +513,7 @@ private fun FilterChipsRow(
             AssistChip(
                 onClick = { setExpanded(true) },
                 label = { Text(stringResource(MR.strings.discover_action_sort)) },
-                trailingIcon = { Icon(MaterialSymbols.Rounded.Sort, contentDescription = null) },
+                trailingIcon = { Icon(MaterialSymbols.Rounded.SortByAlpha, contentDescription = null) },
             )
 
             Spacer(Modifier.weight(1f))

@@ -77,11 +77,11 @@ object DiscoverPresenter {
 
     fun sortRepos(
         repos: List<DirectoryRepo>,
-        sort: SortMode,
+        sort: DiscoverUiState.SortMode,
     ): List<DirectoryRepo> {
         val comparator = when (sort) {
-            is SortMode.NAME -> compareBy({ it.name })
-            is SortMode.COUNT -> compareBy({ -(it.extensionCount ?: Int.MIN_VALUE) }, { it.name })
+            is DiscoverUiState.SortMode.NAME -> compareBy({ it.name })
+            is DiscoverUiState.SortMode.COUNT -> compareBy({ -(it.extensionCount ?: Int.MIN_VALUE) }, { it.name })
         }
         return repos.sortedWith(comparator)
     }
@@ -91,7 +91,7 @@ object DiscoverPresenter {
         repos: List<DirectoryRepo>,
         query: String?,
         filters: DirectoryFilters,
-        sort: SortMode,
+        sort: DiscoverUiState.SortMode,
     ): List<DirectoryRepo> =
         sortRepos(filterRepos(repos, query, filters), sort)
 

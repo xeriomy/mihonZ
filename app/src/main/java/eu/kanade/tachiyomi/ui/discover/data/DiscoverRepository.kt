@@ -73,7 +73,7 @@ class DiscoverRepository(
     suspend fun lastFetchedAt(providerKey: String): Instant? {
         val rows = database.discover_cacheQueries.getAll(providerKey).executeAsList()
         if (rows.isEmpty()) return null
-        return Instant.fromEpochMilliseconds(rows.maxOf { it.fetched_at })
+        return Instant.fromEpochMilliseconds(rows.maxOf { it.fetchedAt })
     }
 
     /** Hot flow of cached repos for [providerKey] (replayed on subscribe). */

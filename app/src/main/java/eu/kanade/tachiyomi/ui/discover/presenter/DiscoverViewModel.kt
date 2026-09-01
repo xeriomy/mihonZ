@@ -125,7 +125,7 @@ class DiscoverViewModel(
         isRefreshing.value = true
         error.value = null
         launchIO {
-            val fetchedAt = Instant.fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds())
+            val fetchedAt = Clock.System.now()
             val newLastUpdated = mutableMapOf<String, Instant?>()
             val all = mutableListOf<DirectoryRepo>()
             var success = true
