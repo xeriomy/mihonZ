@@ -7,6 +7,7 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.domain.discover.DiscoverPreferences
 import eu.kanade.domain.extension.interactor.TrustExtension
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.domain.track.interactor.AddTracks
@@ -32,6 +33,8 @@ import eu.kanade.tachiyomi.extension.util.ExtensionInstallActivity
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.ui.base.delegate.SecureActivityDelegateImpl
+import eu.kanade.tachiyomi.ui.discover.data.DiscoverRepository
+import eu.kanade.tachiyomi.ui.discover.provider.ProviderRegistry
 import eu.kanade.tachiyomi.ui.main.MainActivity
 import eu.kanade.tachiyomi.ui.reader.ReaderActivity
 import eu.kanade.tachiyomi.ui.reader.setting.ReaderPreferences
@@ -114,6 +117,11 @@ interface AppGraph : ViewModelGraph {
     val insertTrack: InsertTrack
 
     val getExtensionStoreCountAsFlow: GetExtensionStoreCountAsFlow
+
+    // DISCOVER: new discover-layer dependencies (extension on existing Graph, no upstream logic touched).
+    val discoverPreferences: DiscoverPreferences
+    val providerRegistry: ProviderRegistry
+    val discoverRepository: DiscoverRepository
 
     @DependencyGraph.Factory
     fun interface Factory {

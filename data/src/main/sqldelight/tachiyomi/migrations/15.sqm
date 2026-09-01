@@ -1,0 +1,8 @@
+-- Discover cache table for the new Discover (extension directory) feature.
+CREATE TABLE discover_cache (
+    provider_key TEXT NOT NULL,
+    repo_id TEXT NOT NULL,
+    payload TEXT NOT NULL,
+    fetched_at INTEGER NOT NULL,
+    PRIMARY KEY (provider_key, repo_id)
+);

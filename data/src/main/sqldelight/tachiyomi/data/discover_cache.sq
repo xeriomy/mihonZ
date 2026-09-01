@@ -1,0 +1,44 @@
+-- Cache of directory-provider listing results.
+-- Entries are written by the Discover layer when it successfully fetches from a
+-- provider, and read by the DiscoverRepository to serve cached data when offline.
+-- Each (providerKey, id) maps to a JSON payload of [DirectoryRepo] serialized
+-- form plus the time it was fetched. A 12-hour TTL is enforced by callers.
+CREATE TABLE discover_cache (
+    provider_key TEXT NOT NULL,
+    repo_id TEXT NOT NULL,
+    payload TEXT NOT NULL,
+    fetched_at INTEGER NOT NULL,
+    PRIMARY KEY (provider_key, repo_id)
+);
+
+getAll:
+SELECT *
+FROM discover_cache
+WHERE provider_key = ?
+ORDER BY fetched_at DESC;
+
+getById:
+SELECT *
+FROM discover_cache
+WHERE provider_key = ? AND repo_id = ?;
+
+getStale:
+SELECT *
+FROM discover_cache
+WHERE provider_key = ? AND fetched_at < ?;
+
+upsert:
+INSERT INTO discover_cache(provider_key, repo_id, payload, fetched_at)
+VALUES (?, ?, ?, ?)
+ON CONFLICT(provider_key, repo_id)
+DO UPDATE
+SET
+    payload = excluded.payload,
+    fetched_at = excluded.fetched_at;
+
+clearByProvider:
+DELETE FROM discover_cache
+WHERE provider_key = ?;
+
+clearAll:
+DELETE FROM discover_cache;

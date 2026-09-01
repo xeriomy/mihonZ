@@ -51,6 +51,20 @@ object SettingsBrowseScreen : SearchableSettings {
                     ),
                 ),
             ),
+            // DISCOVER (Phase 5): entry point to manage enabled directory providers.
+            Preference.PreferenceGroup(
+                title = stringResource(MR.strings.discover_settings_title),
+                preferenceItems = listOf(
+                    Preference.PreferenceItem.TextPreference(
+                        title = stringResource(MR.strings.discover_settings_title),
+                        subtitle = stringResource(MR.strings.discover_settings_summary),
+                        onClick = {
+                            // Phase 5: open Discover directories management screen.
+                            // Placeholder in Phase 1.
+                        },
+                    ),
+                ),
+            ),
             Preference.PreferenceGroup(
                 title = stringResource(MR.strings.pref_category_nsfw_content),
                 preferenceItems = listOf(

@@ -599,8 +599,11 @@ class MainActivity : BaseActivity() {
     }
 
     private fun Intent.isAddExtensionStoreIntent(): Boolean {
+        // DISCOVER (Phase 3): also recognize the fork-namespaced deep link
+        // app.mihon://add-repo?url=<indexUrl> registered in AndroidManifest.
         return (scheme == "tachiyomi" && data?.host == "add-repo") ||
-            (scheme == "mihon" && data?.host == "extension-store")
+            (scheme == "mihon" && data?.host == "extension-store") ||
+            (scheme == "app.mihon" && data?.host == "add-repo")
     }
 
     companion object {

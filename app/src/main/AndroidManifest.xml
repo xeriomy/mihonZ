@@ -82,6 +82,20 @@
                 <data android:host="extension-store" />
             </intent-filter>
 
+            <!-- DISCOVER (Phase 3): namespaced deep link for one-tap repo add via the
+                 Discover tab. Uses the fork's applicationId namespace (app.mihon), NOT
+                 generic https:// or the stock mihon:// scheme. Routed in
+                 MainActivity.handleIntentAction via isAddExtensionStoreIntent(). -->
+            <intent-filter android:label="@string/action_addExtensionStore">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="app.mihon" />
+                <data android:host="add-repo" />
+            </intent-filter>
+
             <!-- Open backup files -->
             <intent-filter android:label="@string/pref_restore_backup">
                 <action android:name="android.intent.action.VIEW" />
