@@ -17,6 +17,7 @@ import eu.kanade.tachiyomi.ui.discover.provider.ProviderRegistry
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -47,6 +48,21 @@ class DiscoverViewModel(
     private val error = MutableStateFlow<String?>(null)
     private val lastUpdatedAtByProvider = MutableStateFlow<Map<String, Instant?>>(emptyMap())
 
+    /**
+     * Snapshot of the transient UI side-state (refresh progress / errors / last
+     * fetched times) combined into a single value so the [combine] below stays
+     * within the 5-arity fixed overload that kotlinx-coroutines exposes.
+     */
+    private val refreshState = combine(
+        isRefreshing,
+        error,
+        lastUpdatedAtByProvider,
+    ) { refreshing, err, lastUpdated ->
+        RefreshState(refreshing, err, lastUpdated)
+    }
+        .distinctUntilChanged()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, RefreshState(false, null, emptyMap()))
+
     /** Backing store of fully-fetched, deduplicated repos across all providers. */
     private val repos = MutableStateFlow<List<DirectoryRepo>>(emptyList())
 
@@ -59,26 +75,24 @@ class DiscoverViewModel(
         searchQuery,
         filters,
         sort,
-        isRefreshing,
-        error,
-        lastUpdatedAtByProvider,
-    ) { providers, fetchedRepos, query, filter, sortMode, refreshing, err, lastUpdated ->
+    ) { providers, fetchedRepos, query, filter, sortMode ->
         val merged = DiscoverPresenter.mergeRepos(fetchedRepos)
+        val refresh = refreshState.value
         DiscoverUiState(
             isLoading = false,
-            isRefreshing = refreshing,
-            error = err,
+            isRefreshing = refresh.isRefreshing,
+            error = refresh.error,
             repos = DiscoverPresenter.deriveView(merged, query, filter, sortMode),
             searchQuery = query,
             filters = filter,
             sort = sortMode,
             hasProviders = providers.isNotEmpty(),
             enabledProviderKeys = providers.map { it.key }.toSet(),
-            lastUpdatedAtByProvider = lastUpdated,
+            lastUpdatedAtByProvider = refresh.lastUpdated,
         )
     }
         .distinctUntilChanged()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5.seconds), DiscoverUiState(isLoading = true))
+        .stateIn(viewModelScope, WhileSubscribed(5.seconds), DiscoverUiState(isLoading = true))
 
     init {
         // Initial load: hydrate from cache immediately, then attempt a remote refresh.
@@ -166,4 +180,12 @@ class DiscoverViewModel(
         data object NoProvidersEnabled : Event
         data class ShowMessage(val message: String) : Event
     }
+
+    /** Transient refresh/error/timestamp side-state snapshotted for [combine]. */
+    @Immutable
+    data class RefreshState(
+        val isRefreshing: Boolean,
+        val error: String?,
+        val lastUpdated: Map<String, Instant?>,
+    )
 }
