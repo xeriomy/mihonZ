@@ -97,6 +97,12 @@ data class DirectoryFilters(
     }
 }
 
+/** Cycles the NSFW filter to the next value (wrapping around). */
+fun DirectoryFilters.NsfwFilter.next(): DirectoryFilters.NsfwFilter {
+    val values = DirectoryFilters.NsfwFilter.entries
+    return values[(ordinal + 1) % values.size]
+}
+
 /**
  * Capabilities advertised by a directory provider so the UI can adapt.
  */

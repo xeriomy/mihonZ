@@ -18,7 +18,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleCrop
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChip
@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import eu.kanade.tachiyomi.ui.discover.domain.ContentType
 import eu.kanade.tachiyomi.ui.discover.domain.DirectoryFilters
 import eu.kanade.tachiyomi.ui.discover.domain.DirectoryRepo
+import eu.kanade.tachiyomi.ui.discover.domain.next
 import eu.kanade.tachiyomi.ui.discover.presenter.DiscoverUiState
 import mihon.icons.materialsymbols.MaterialSymbols
 import mihon.icons.materialsymbols.rounded.Close
@@ -425,7 +426,7 @@ private fun RepoCard(
 private fun BadgeBox(text: String, color: Color) {
     Box(
         Modifier
-            .clip(CircleCrop)
+            .clip(CircleShape)
             .background(color.copy(alpha = 0.15f))
             .padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
@@ -450,7 +451,7 @@ private fun RepoAvatar(name: String) {
     Box(
         modifier = Modifier
             .size(36.dp)
-            .clip(CircleCrop)
+            .clip(CircleShape)
             .background(bg),
         contentAlignment = Alignment.Center,
     ) {
