@@ -18,8 +18,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.SharingStarted.Companion.Eagerly
-import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -92,7 +92,7 @@ class DiscoverViewModel(
         )
     }
         .distinctUntilChanged()
-        .stateIn(viewModelScope, WhileSubscribed(5.seconds), DiscoverUiState(isLoading = true))
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5.seconds), DiscoverUiState(isLoading = true))
 
     init {
         // Initial load: hydrate from cache immediately, then attempt a remote refresh.
